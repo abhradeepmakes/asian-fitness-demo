@@ -1,0 +1,25 @@
+name: Rename to index
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/rename-to-index.yml
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename website file to index.html
+        run: |
+          git config user.name "abhradeepmakes"
+          git config user.email "abhradeepmakes@users.noreply.github.com"
+          if [ -f index.html ]; then git rm index.html; fi
+          if [ -f asian-fitness-demo-website.html ]; then git mv asian-fitness-demo-website.html index.html || mv asian-fitness-demo-website.html index.html; fi
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing to change"; exit 0; fi
+          git commit -m "Replace index.html with redesigned website (rename)"
+          git push origin main
